@@ -12,7 +12,10 @@ function TodoItem(props) {
       >
         <BsCheckLg />
       </span>
-      <p className={`TodoItem-p ${props.completed && "TodoItem-p--complete"}`}>
+      <p
+        onClick={props.onEdit}
+        className={`TodoItem-p ${props.completed && "TodoItem-p--complete"}`}
+      >
         {props.text}
       </p>
       <span className="Icon Icon-delete" onClick={props.onDelete}>

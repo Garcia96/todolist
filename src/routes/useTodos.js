@@ -8,10 +8,9 @@ function useTodos() {
     loading,
     error,
     sincronize: sincronizeTodos,
-  } = useLocalStorage("TODOS_V1", []);
+  } = useLocalStorage("TODOS_V2", []);
 
   const [searchValue, setSearchValue] = React.useState("");
-  const [openModal, setOpenModal] = React.useState(false);
 
   const completedTodos = todos.filter((todo) => todo.completed).length;
   const totalTodos = todos.length;
@@ -19,7 +18,7 @@ function useTodos() {
   let searchedTodos = [];
 
   if (!searchValue.length >= 1) {
-    searchedTodos = todos;
+    searchedTodos = sortTodos(todos);
   } else {
     searchedTodos = todos.filter((todo) => {
       const todoText = todo.text.toLowerCase();
@@ -28,24 +27,38 @@ function useTodos() {
     });
   }
 
-  const completeTodo = (text) => {
-    const todoIndex = todos.findIndex((todo) => todo.text === text);
+  const addTodo = (text) => {
+    const id = Date.now();
+    const newTodos = [...todos];
+    newTodos.push({
+      text,
+      completed: false,
+      id,
+    });
+    saveTodos(newTodos);
+  };
+
+  const getTodo = (id) => {
+    const todoIndex = todos.findIndex((todo) => todo.id === id);
+    return todos[todoIndex];
+  };
+
+  const editTodo = (id, newText) => {
+    const todoIndex = todos.findIndex((todo) => todo.id === id);
+    const newTodos = [...todos];
+    newTodos[todoIndex].text = newText;
+    saveTodos(newTodos);
+  };
+
+  const completeTodo = (id) => {
+    const todoIndex = todos.findIndex((todo) => todo.id === id);
     const newTodos = [...todos];
     newTodos[todoIndex].completed = true;
     saveTodos(newTodos);
   };
 
-  const addTodo = (text) => {
-    const newTodos = [...todos];
-    newTodos.push({
-      text: text,
-      completed: false,
-    });
-    saveTodos(newTodos);
-  };
-
-  const deleteTodo = (text) => {
-    const todoIndex = todos.findIndex((todo) => todo.text === text);
+  const deleteTodo = (id) => {
+    const todoIndex = todos.findIndex((todo) => todo.id === id);
     const newTodos = [...todos];
     newTodos.splice(todoIndex, 1);
     saveTodos(newTodos);
@@ -59,14 +72,18 @@ function useTodos() {
     searchValue,
     setSearchValue,
     searchedTodos,
+    getTodo,
     completeTodo,
+    editTodo,
     deleteTodo,
-    openModal,
-    setOpenModal,
     addTodo,
     todos,
     sincronizeTodos,
   };
+}
+
+function sortTodos(todos) {
+  return todos.sort((a, b) => a.completed - b.completed);
 }
 
 export { useTodos };

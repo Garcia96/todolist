@@ -11,7 +11,7 @@ textarea {
   border: 0;
   border-radius: 2px;
   border: 2px solid #202329;
-  margin: 2rem 24px 1px 2rem;
+  margin: 1rem 24px 1px 2rem;
   min-height: 35px;
   height: 120px;
   min-width: calc(100% - 62px);
@@ -45,7 +45,7 @@ label {
 
 .TodoForm-buttonContainer {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   width: 100%;
 }
@@ -66,11 +66,11 @@ label {
 .TodoForm-button--add {
   background: #2158ff;
   color: #fff;
-  box-shadow: 0px 5px 25px rgba(97, 218, 250, 0.5);
+  box-shadow: 0px 5px 25px rgba(97, 122, 250, 0.5);
 }
 
 .TodoForm-button--cancel {
-  background: transparent;
+  background: #fff;
 }
 
 .TodoForm span {

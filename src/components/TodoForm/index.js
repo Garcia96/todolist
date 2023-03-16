@@ -1,41 +1,33 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./TodoForm.css";
 
-function TodoForm({ addTodo, setOpenModal, todos }) {
-  const [todoValue, setTodoValue] = React.useState("");
+function TodoForm(props) {
+  const navigate = useNavigate();
+  const [todoValue, setTodoValue] = React.useState(props.defaultTodoText || "");
   const [errorValue, setErrorValue] = React.useState("");
   const onCancel = () => {
-    setOpenModal((prevState) => !prevState);
+    navigate("/");
   };
 
   const onSubmit = (event) => {
     event.preventDefault();
 
     if (!errorValue && todoValue.length) {
-      addTodo(todoValue);
-      setOpenModal(false);
+      props.submitEvent(todoValue);
       setTodoValue("");
       setErrorValue("");
+      navigate("/");
     }
   };
 
   const onChange = (event) => {
     setTodoValue(event.target.value);
-    const todoExist = todos.some((todo) => {
-      const todoText = todo.text.toLowerCase();
-      const searchText = event.target.value.toLowerCase();
-      return todoText === searchText;
-    });
-    if (todoExist) {
-      setErrorValue("El TODO ya existe");
-    } else {
-      setErrorValue("");
-    }
   };
 
   return (
     <form className="TodoForm" onSubmit={onSubmit}>
-      <label>Escribe tu nuevo TODO</label>
+      <h1>{props.label}</h1>
       <textarea
         value={todoValue}
         onChange={onChange}
@@ -52,7 +44,7 @@ function TodoForm({ addTodo, setOpenModal, todos }) {
           Cancelar
         </button>
         <button className="TodoForm-button TodoForm-button--add" type="submit">
-          Añadir
+          Guardar
         </button>
       </div>
     </form>
